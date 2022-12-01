@@ -45,6 +45,7 @@ router.post('/createEvent', async (req, res, next) => {
     // await file.mv(path.join(__dirname, '../resumes', fileName));
 
     const { auth, calendar } = await authentication();
+    if (!auth || !calendar) throw Error;
     const event = {
       summary: `Manektech interview - ${candidate_name}`,
       description: `Dear <b>${candidate_name}</b>,
@@ -96,6 +97,8 @@ router.post('/createEvent', async (req, res, next) => {
       sendUpdates: 'all',
       sendNotifications: true,
     });
+
+    console.log(result);
     req.flash('success', 'Interview Schedule successfully.');
   } catch (err) {
     req.flash('error', err?.message);
