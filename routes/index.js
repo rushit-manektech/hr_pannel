@@ -9,8 +9,8 @@ router.get('/', async (req, res, next) => {
     const { calendar } = await authentication();
     const response = await calendar?.events?.list({
       calendarId: 'primary',
-      timeMin: new Date().toISOString(),
-      timeMax: moment().endOf('day').toISOString(),
+      timeMin: moment.utc().toISOString(),
+      timeMax: moment.utc().endOf('day').toISOString(),
       singleEvents: true,
       orderBy: 'startTime',
     });
@@ -61,8 +61,8 @@ router.post('/createEvent', async (req, res, next) => {
       Before start the interview, please make sure below points:<ul><li>You are attending a call from a Desktop/Laptop and a quiet place.</li><li>You have a working webcam.</li><li>You are having stable internet connection.</li></ul>
       `,
       // Resume: <a href="${req.protocol}://${req.get('host')}/resumes/${fileName}" target="_blank"> Resume URL </a>
-      start: { dateTime: new Date(event_date).toISOString() },
-      end: { dateTime: moment(event_date).add(60, 'minutes').toISOString() },
+      start: { dateTime: moment.utc().toISOString() },
+      end: { dateTime: moment.utc(event_date).add(60, 'minutes').toISOString() },
       attendees: [
         { displayName: `Interviewer: ${interviewer_name}`, email: interviewer_email },
         { displayName: `Candidate: ${candidate_name}`, email: candidate_email },
@@ -70,8 +70,8 @@ router.post('/createEvent', async (req, res, next) => {
       reminders: {
         useDefault: false,
         overrides: [
-          { method: 'email', minutes: moment(event_date).diff(moment(new Date()), 'minutes') },
-          { method: 'popup', minutes: moment(event_date).diff(moment(new Date()), 'minutes') },
+          { method: 'email', minutes: moment.utc(event_date).diff(moment(new Date()), 'minutes') },
+          { method: 'popup', minutes: moment.utc(event_date).diff(moment(new Date()), 'minutes') },
           { method: 'email', minutes: 60 },
           { method: 'popup', minutes: 10 },
         ],
