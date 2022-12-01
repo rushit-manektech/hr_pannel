@@ -32,8 +32,8 @@ app.use(
 app.use(flash());
 app.use(fileUpload());
 
-app.use('/resumes', express.static('resumes'));
 app.use('/', require('./routes/index'));
+app.use('/resumes', express.static('resumes'));
 
 setInterval(function () {
   let dirPath = __dirname + './resumes';
@@ -56,13 +56,6 @@ setInterval(function () {
 
 app.use(function (req, res, next) {
   next(createError(404));
-});
-
-app.use(function (err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  res.status(err.status || 500);
-  res.render('error');
 });
 
 app.listen(port, (err) => console.log(err ? err?.message : `listening on ${port}`));
