@@ -1,8 +1,12 @@
 {
-  "name": "emailinvite",
+  "name": "mt-interview",
   "version": "0.0.0",
+  "description": "## Event management app. MT Interview provides an event management tool.",
+  "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node app.js",
+    "nodemon": "nodemon app.js",
+    "pm2": "pm2 start ./ecosystem.config.js"
   },
   "dependencies": {
     "@google-cloud/local-auth": "^2.1.0",
@@ -17,5 +21,8 @@
     "http-errors": "~1.6.3",
     "moment": "^2.29.4",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
