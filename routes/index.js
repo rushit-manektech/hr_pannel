@@ -40,9 +40,9 @@ router.post('/createEvent', async (req, res, next) => {
       zoom_password,
     } = req.body;
 
-    const file = req.files.resume;
-    const fileName = file.name.replace(/ +/g, '');
-    await file.mv(path.join(__dirname, '../resumes', fileName));
+    // const file = req.files.resume;
+    // const fileName = file.name.replace(/ +/g, '');
+    // await file.mv(path.join(__dirname, '../resumes', fileName));
 
     const { auth, calendar } = await authentication();
     const event = {
@@ -58,7 +58,8 @@ router.post('/createEvent', async (req, res, next) => {
       }</b> Hope the timing works for you.
 
       Before start the interview, please make sure below points:<ul><li>You are attending a call from a Desktop/Laptop and a quiet place.</li><li>You have a working webcam.</li><li>You are having stable internet connection.</li></ul>
-      Resume: <a href="${req.protocol}://${req.get('host')}/resumes/${fileName}" target="_blank"> Resume URL </a>`,
+      `,
+      // Resume: <a href="${req.protocol}://${req.get('host')}/resumes/${fileName}" target="_blank"> Resume URL </a>
       start: { dateTime: new Date(event_date).toISOString() },
       end: { dateTime: moment(event_date).add(60, 'minutes').toISOString() },
       attendees: [
