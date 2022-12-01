@@ -4,9 +4,7 @@
   "description": "## Event management app. MT Interview provides an event management tool.",
   "private": true,
   "scripts": {
-    "start": "node app.js",
-    "nodemon": "nodemon app.js",
-    "pm2": "pm2 start ./ecosystem.config.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "@google-cloud/local-auth": "^2.1.0",
