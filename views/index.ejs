@@ -133,29 +133,50 @@
           <% if(!!events?.length){%>
           <div class="d-flex align-items-center justify-content-between">
             <h3>Today's Remaining Interviews: <%= events?.length %></h3>
-            <h5><%= moment().format('DD MMM YYYY') %></h5>
+            <h5><%= new Date().toLocaleString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) %></h5>
           </div>
           <% for(let i=0; i < events?.length; i++) { %>
           <details class="card">
             <summary class="card-header"><%= events[i]?.summary %></summary>
 
-            <ul class="card-body px-5">
-              <li class="class-text">
-                Gmeet Link:
-                <a class="card-link" href=" <%= events[i]?.hangoutLink %> " target="_blank">
-                  <%= events[i]?.hangoutLink %>
-                </a>
-              </li>
+            <div class="d-flex">
+              <ul class="card-body px-5">
+                <li class="class-text">
+                  Gmeet Link:
+                  <a
+                    class="card-link"
+                    style="outline: none; text-decoration: none"
+                    href=" <%= events[i]?.hangoutLink %> "
+                    target="_blank"
+                  >
+                    <%= events[i]?.hangoutLink %>
+                  </a>
+                </li>
 
-              <li class="class-text">
-                Start time: <%= moment(events[i]?.start?.dateTime).format('hh:mm a') %> &nbsp; &nbsp; &nbsp; End time:
-                <%= moment(events[i]?.end?.dateTime).format('hh:mm a') %>
-              </li>
+                <li class="class-text">
+                  Start time: <%= new Date(events[i]?.start?.dateTime).toLocaleString('en-US', { hour: 'numeric',
+                  minute: 'numeric', hour12: true }) %> &nbsp; &nbsp; &nbsp; End time: <%= new
+                  Date(events[i]?.end?.dateTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12:
+                  true }) %>
+                </li>
 
-              <% for (item of events[i]?.attendees) { %>
-              <li class="class-text"><%= item?.email %></li>
-              <% } %>
-            </ul>
+                <% for (item of events[i]?.attendees) { %>
+                <li class="class-text"><%= item?.email %></li>
+                <% } %>
+              </ul>
+              <div>
+                <button class="btn btn-danger mt-2 mx-2">
+                  <a
+                    class="text-white"
+                    style="outline: none; text-decoration: none"
+                    href="/delete/<%= events[i]?.id %>"
+                    target="_blank"
+                  >
+                    Delete
+                  </a>
+                </button>
+              </div>
+            </div>
           </details>
           <% } %> <% } else { %>
           <h3 class="text-center">No upcoming interviews!</h3>

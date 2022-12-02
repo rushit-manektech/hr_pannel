@@ -11,7 +11,7 @@ router.get('/', async (req, res, next) => {
     const response = await calendar?.events?.list({
       calendarId: 'primary',
       timeMin: currentISODate,
-      timeMax: moment().endOf('day').toISOString(),
+      timeMax: new Date(new Date().setHours(23, 59, 59, 999)).toISOString(),
       singleEvents: true,
       orderBy: 'startTime',
     });
@@ -105,13 +105,15 @@ router.post('/createEvent', async (req, res, next) => {
 
 router.get('/delete/:id', async (req, res, next) => {
   try {
-    // const { auth, calendar } = await authentication();
+    const { auth } = await authentication();
 
-    // await calendar?.events?.delete({
-    //   auth: auth,
-    //   calendarId: 'primary',
-    // });
-    req.flash('success', 'Interview Schedule successfully.');
+    await calendar?.events?.delete({
+      auth: auth,
+      calendarId: 'primary',
+      eventId: req.params.id,
+      sendUpdates: 'all',
+    });
+    req.flash('success', 'Interview canceled successfully.');
   } catch (err) {
     req.flash('error', err?.message);
   } finally {
