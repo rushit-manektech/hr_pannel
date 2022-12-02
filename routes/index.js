@@ -57,8 +57,8 @@ router.post('/createEvent', async (req, res, next) => {
 
       Before start the interview, please make sure below points:<ul><li>You are attending a call from a Desktop/Laptop and a quiet place.</li><li>You have a working webcam.</li><li>You are having stable internet connection.</li></ul>
       `,
-      start: { dateTime: new Date(event_date).toISOString(), timeZone: 'Asia/Kolkata' },
-      end: { dateTime: endTime(event_date), timeZone: 'Asia/Kolkata' },
+      start: { dateTime: new Date(event_date).toISOString() },
+      end: { dateTime: endTime(event_date) },
       attendees: [
         { displayName: `Interviewer: ${interviewer_name}`, email: interviewer_email },
         { displayName: `Candidate: ${candidate_name}`, email: candidate_email },
