@@ -1,12 +1,12 @@
 module.exports = {
   currentISODate: new Date().toISOString(),
   endTime: (date) => {
-    let newDate = new Date(date);
+    let newDate = date ? new Date(date) : new Date();
     newDate.setHours(newDate.getHours() + 1);
     return newDate.toISOString();
   },
   dateISOFormate: (date) => {
-    let ISODate = new Date(date);
+    let ISODate = date ? new Date(date) : new Date();
     // decrease the Asia/Kolkatta time +5:30
     ISODate.setHours(ISODate.getHours() - 5);
     ISODate.setMinutes(ISODate.getMinutes() - 30);

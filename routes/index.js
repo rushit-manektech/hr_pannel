@@ -42,6 +42,8 @@ router.post('/createEvent', async (req, res, next) => {
     } = req.body;
 
     const { auth, calendar } = await authentication();
+    const startDate = dateISOFormate(event_date);
+    const dateDiff = dateDifference('minutes', startDate);
 
     const event = {
       summary: `Manektech interview - ${candidate_name}`,
@@ -57,8 +59,8 @@ router.post('/createEvent', async (req, res, next) => {
 
       Before start the interview, please make sure below points:<ul><li>You are attending a call from a Desktop/Laptop and a quiet place.</li><li>You have a working webcam.</li><li>You are having stable internet connection.</li></ul>
       `,
-      start: { dateTime: dateISOFormate(event_date) },
-      end: { dateTime: endTime(event_date) },
+      start: { dateTime: startDate },
+      end: { dateTime: endTime(startDate) },
       attendees: [
         { displayName: `Interviewer: ${interviewer_name}`, email: interviewer_email },
         { displayName: `Candidate: ${candidate_name}`, email: candidate_email },
@@ -66,8 +68,8 @@ router.post('/createEvent', async (req, res, next) => {
       reminders: {
         useDefault: false,
         overrides: [
-          { method: 'email', minutes: dateDifference('minutes', event_date) },
-          { method: 'popup', minutes: dateDifference('minutes', event_date) },
+          { method: 'email', minutes: dateDiff },
+          { method: 'popup', minutes: dateDiff },
           { method: 'email', minutes: 60 },
           { method: 'popup', minutes: 10 },
         ],
