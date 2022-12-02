@@ -3,7 +3,7 @@ const router = require('express').Router(),
   { randomUUID } = require('crypto'),
   moment = require('moment'),
   authentication = require('../google'),
-  { currentISODate, endTime } = require('../utils');
+  { currentISODate, endTime, dateDifference } = require('../utils');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -43,9 +43,6 @@ router.post('/createEvent', async (req, res, next) => {
 
     const { auth, calendar } = await authentication();
 
-    const minutes_diff = await dateDifference('minutes', event_date);
-    const interview_time_in_minutes = endTime(event_date);
-
     const event = {
       summary: `Manektech interview - ${candidate_name}`,
       description: `Dear <b>${candidate_name}</b>,
@@ -61,7 +58,7 @@ router.post('/createEvent', async (req, res, next) => {
       Before start the interview, please make sure below points:<ul><li>You are attending a call from a Desktop/Laptop and a quiet place.</li><li>You have a working webcam.</li><li>You are having stable internet connection.</li></ul>
       `,
       start: { dateTime: new Date(event_date).toISOString(), timeZone: 'Asia/Kolkata' },
-      end: { dateTime: interview_time_in_minutes, timeZone: 'Asia/Kolkata' },
+      end: { dateTime: endTime(event_date), timeZone: 'Asia/Kolkata' },
       attendees: [
         { displayName: `Interviewer: ${interviewer_name}`, email: interviewer_email },
         { displayName: `Candidate: ${candidate_name}`, email: candidate_email },
@@ -69,8 +66,8 @@ router.post('/createEvent', async (req, res, next) => {
       reminders: {
         useDefault: false,
         overrides: [
-          { method: 'email', minutes: minutes_diff },
-          { method: 'popup', minutes: minutes_diff },
+          { method: 'email', minutes: dateDifference('minutes', event_date) },
+          { method: 'popup', minutes: dateDifference('minutes', event_date) },
           { method: 'email', minutes: 60 },
           { method: 'popup', minutes: 10 },
         ],
