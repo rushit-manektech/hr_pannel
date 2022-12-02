@@ -5,6 +5,13 @@ module.exports = {
     newDate.setHours(newDate.getHours() + 1);
     return newDate.toISOString();
   },
+  dateISOFormate: (date) => {
+    let ISODate = new Date(date);
+    // decrease the Asia/Kolkatta time +5:30
+    ISODate.setHours(ISODate.getHours() - 5);
+    ISODate.setMinutes(ISODate.getMinutes() - 30);
+    return ISODate.toISOString();
+  },
   dateDifference: (formate = 'minutes', date1 = new Date(), date2 = new Date()) => {
     const diff = Math.abs(new Date(date2) - new Date(date1));
     let date = diff;

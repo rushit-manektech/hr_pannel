@@ -3,7 +3,7 @@ const router = require('express').Router(),
   { randomUUID } = require('crypto'),
   moment = require('moment'),
   authentication = require('../google'),
-  { currentISODate, endTime, dateDifference } = require('../utils');
+  { currentISODate, endTime, dateDifference, dateISOFormate } = require('../utils');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -57,7 +57,7 @@ router.post('/createEvent', async (req, res, next) => {
 
       Before start the interview, please make sure below points:<ul><li>You are attending a call from a Desktop/Laptop and a quiet place.</li><li>You have a working webcam.</li><li>You are having stable internet connection.</li></ul>
       `,
-      start: { dateTime: new Date(event_date).toISOString() },
+      start: { dateTime: dateISOFormate(event_date) },
       end: { dateTime: endTime(event_date) },
       attendees: [
         { displayName: `Interviewer: ${interviewer_name}`, email: interviewer_email },
@@ -93,6 +93,22 @@ router.post('/createEvent', async (req, res, next) => {
       sendUpdates: 'all',
       sendNotifications: true,
     });
+    req.flash('success', 'Interview Schedule successfully.');
+  } catch (err) {
+    req.flash('error', err?.message);
+  } finally {
+    return res.redirect('/');
+  }
+});
+
+router.get('/delete/:id', async (req, res, next) => {
+  try {
+    // const { auth, calendar } = await authentication();
+
+    // await calendar?.events?.delete({
+    //   auth: auth,
+    //   calendarId: 'primary',
+    // });
     req.flash('success', 'Interview Schedule successfully.');
   } catch (err) {
     req.flash('error', err?.message);
