@@ -154,10 +154,10 @@
                 </li>
 
                 <li class="class-text">
-                  Start time: <%= new Date(events[i]?.start?.dateTime).toLocaleString('en-US', { hour: 'numeric',
-                  minute: 'numeric', hour12: true }) %> &nbsp; &nbsp; &nbsp; End time: <%= new
-                  Date(events[i]?.end?.dateTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12:
-                  true }) %>
+                  Start time: <%= new Date(events[i]?.start?.dateTime).toLocaleString('en-US', { timeZone:
+                  'Asia/Calcutta', hour: 'numeric', minute: 'numeric', hour12: true }) %> &nbsp; &nbsp; &nbsp; End time:
+                  <%= new Date(events[i]?.end?.dateTime).toLocaleString('en-US', { timeZone: 'Asia/Calcutta', hour:
+                  'numeric', minute: 'numeric', hour12: true }) %>
                 </li>
 
                 <% for (item of events[i]?.attendees) { %>
