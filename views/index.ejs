@@ -60,13 +60,12 @@
       </h3>
 
       <div class="my-5" style="width: 60%; margin-left: 20%">
-        <form action="/createEvent" class="row my-5" method="post" encType="multipart/form-data">
+        <form action="/createEvent" class="row my-5" method="post">
           <div class="col-6 mb-3">
             <label for="platform_type" class="form-label"> Platform : </label>
             <select class="form-select" name="platform_type" id="platform_type" onchange="ShowHideDiv()">
               <option value="meet">Google Meet</option>
               <option value="skype">Skype</option>
-              <!-- <option value="zoom">Zoom</option> -->
             </select>
           </div>
 
@@ -114,11 +113,6 @@
             <label for="candidate_email" class="form-label"> Candidate Email: </label>
             <input type="email" class="form-control" id="candidate_email" name="candidate_email" required />
           </div>
-          <!-- 
-          <div class="col-12 mb-3">
-            <label for="resume" class="form-label"> Resume: </label>
-            <input type="file" class="form-control" id="resume" name="resume" required />
-          </div> -->
 
           <button class="btn btn-primary px-5">Submit</button>
         </form>
@@ -153,7 +147,6 @@
                 </a>
               </li>
 
-              <li class="class-text">Resume: <%- events[i]?.description.split('Resume: ')[1] %></li>
               <li class="class-text">
                 Start time: <%= moment(events[i]?.start?.dateTime).format('hh:mm a') %> &nbsp; &nbsp; &nbsp; End time:
                 <%= moment(events[i]?.end?.dateTime).format('hh:mm a') %>

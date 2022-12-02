@@ -1,16 +1,17 @@
 const router = require('express').Router(),
-  authentication = require('../google'),
+  path = require('path'),
   { randomUUID } = require('crypto'),
   moment = require('moment'),
-  path = require('path');
+  authentication = require('../google'),
+  { currentISODate, endTime } = require('../utils');
 
 router.get('/', async (req, res, next) => {
   try {
     const { calendar } = await authentication();
     const response = await calendar?.events?.list({
       calendarId: 'primary',
-      timeMin: moment.utc().toISOString(),
-      timeMax: moment.utc().endOf('day').toISOString(),
+      timeMin: currentISODate,
+      timeMax: moment().endOf('day').toISOString(),
       singleEvents: true,
       orderBy: 'startTime',
     });
@@ -40,12 +41,11 @@ router.post('/createEvent', async (req, res, next) => {
       zoom_password,
     } = req.body;
 
-    // const file = req.files.resume;
-    // const fileName = file.name.replace(/ +/g, '');
-    // await file.mv(path.join(__dirname, '../resumes', fileName));
-
     const { auth, calendar } = await authentication();
-    if (!auth || !calendar) throw Error;
+
+    const minutes_diff = await dateDifference('minutes', event_date);
+    const interview_time_in_minutes = endTime(event_date);
+
     const event = {
       summary: `Manektech interview - ${candidate_name}`,
       description: `Dear <b>${candidate_name}</b>,
@@ -60,9 +60,8 @@ router.post('/createEvent', async (req, res, next) => {
 
       Before start the interview, please make sure below points:<ul><li>You are attending a call from a Desktop/Laptop and a quiet place.</li><li>You have a working webcam.</li><li>You are having stable internet connection.</li></ul>
       `,
-      // Resume: <a href="${req.protocol}://${req.get('host')}/resumes/${fileName}" target="_blank"> Resume URL </a>
-      start: { dateTime: moment.utc().toISOString() },
-      end: { dateTime: moment.utc(event_date).add(60, 'minutes').toISOString() },
+      start: { dateTime: new Date(event_date).toISOString(), timeZone: 'Asia/Kolkata' },
+      end: { dateTime: interview_time_in_minutes, timeZone: 'Asia/Kolkata' },
       attendees: [
         { displayName: `Interviewer: ${interviewer_name}`, email: interviewer_email },
         { displayName: `Candidate: ${candidate_name}`, email: candidate_email },
@@ -70,8 +69,8 @@ router.post('/createEvent', async (req, res, next) => {
       reminders: {
         useDefault: false,
         overrides: [
-          { method: 'email', minutes: moment.utc(event_date).diff(moment(new Date()), 'minutes') },
-          { method: 'popup', minutes: moment.utc(event_date).diff(moment(new Date()), 'minutes') },
+          { method: 'email', minutes: minutes_diff },
+          { method: 'popup', minutes: minutes_diff },
           { method: 'email', minutes: 60 },
           { method: 'popup', minutes: 10 },
         ],
@@ -89,7 +88,7 @@ router.post('/createEvent', async (req, res, next) => {
         },
       },
     };
-    const result = await calendar?.events?.insert({
+    await calendar?.events?.insert({
       auth: auth,
       calendarId: 'primary',
       resource: platform_type === 'skype' ? event : eventWithConferenceData,
@@ -97,13 +96,11 @@ router.post('/createEvent', async (req, res, next) => {
       sendUpdates: 'all',
       sendNotifications: true,
     });
-
-    console.log(result);
     req.flash('success', 'Interview Schedule successfully.');
   } catch (err) {
     req.flash('error', err?.message);
   } finally {
-    res.redirect('/');
+    return res.redirect('/');
   }
 });
 

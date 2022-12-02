@@ -50,7 +50,6 @@ async function authentication() {
     const calendar = google.calendar({ version: 'v3', auth });
     return { auth, calendar };
   } catch (error) {
-    console.log('authentication Error: ' + error);
     return error?.message;
   }
 }
