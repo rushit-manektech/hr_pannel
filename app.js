@@ -5,7 +5,6 @@ const fs = require('fs'),
   express = require('express'),
   flash = require('connect-flash'),
   session = require('express-session'),
-  createError = require('http-errors'),
   cookieParser = require('cookie-parser');
 
 const app = express();
@@ -30,10 +29,6 @@ app.use(
 app.use(flash());
 
 app.use('/', require('./routes/index'));
-
-app.use(function (req, res, next) {
-  next(createError(404));
-});
 
 app.listen(port, (err) => console.log(err ? err?.message : `listening on ${port}`));
 

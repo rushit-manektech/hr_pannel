@@ -133,7 +133,10 @@
           <% if(!!events?.length){%>
           <div class="d-flex align-items-center justify-content-between">
             <h3>Today's Remaining Interviews: <%= events?.length %></h3>
-            <h5><%= new Date().toLocaleString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) %></h5>
+            <h5>
+              <%= new Date().toLocaleString('en-US', {timeZone: 'Asia/Calcutta', day: 'numeric', month: 'short', year:
+              'numeric' }) %>
+            </h5>
           </div>
           <% for(let i=0; i < events?.length; i++) { %>
           <details class="card">

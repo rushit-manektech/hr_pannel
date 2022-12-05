@@ -15,7 +15,6 @@ router.get('/', async (req, res, next) => {
       singleEvents: true,
       orderBy: 'startTime',
     });
-    console.log(response?.data?.items[0].start);
     return res.render('index.ejs', {
       title: 'ManekTech Schedule Interview',
       success_message: req.flash('success'),
