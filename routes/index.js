@@ -1,7 +1,5 @@
 const router = require('express').Router(),
-  path = require('path'),
   { randomUUID } = require('crypto'),
-  moment = require('moment'),
   authentication = require('../google'),
   { currentISODate, endTime, dateDifference, dateISOFormate } = require('../utils');
 
@@ -20,6 +18,7 @@ router.get('/', async (req, res, next) => {
       success_message: req.flash('success'),
       error_message: req.flash('error'),
       events: response?.data?.items,
+      currentISODate,
     });
   } catch (error) {
     return res.send(error?.message);
@@ -51,14 +50,13 @@ router.post('/createEvent', async (req, res, next) => {
 
       Hope you are doing well. Blocking your calendar for a round of Interview.
 
+      ${platform_type === 'skype' ? `Candidate SkypeId: ${candidate_skype_id}` : ''} 
+
       Kindly go through the details and share your acceptance.
 
-      Joining link is given. <b>${
-        platform_type === 'skype' ? `Candidate SkypeId: ${candidate_skype_id}` : ''
-      }</b> Hope the timing works for you.
-
-      Before start the interview, please make sure below points:<ul><li>You are attending a call from a Desktop/Laptop and a quiet place.</li><li>You have a working webcam.</li><li>You are having stable internet connection.</li></ul>
-      `,
+      Joining link is given. Hope the timing works for you.
+      
+      Before start the interview, please make sure below points:<ul><li>You are attending a call from a Desktop/Laptop and a quiet place.</li><li>You have a working webcam.</li><li>You are having stable internet connection.</li></ul>`,
       start: { dateTime: startDate },
       end: { dateTime: endTime(startDate) },
       attendees: [

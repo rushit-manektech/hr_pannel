@@ -71,7 +71,14 @@
 
           <div class="col-6 mb-3">
             <label for="event_date" class="form-label"> Date & time: </label>
-            <input type="datetime-local" class="form-control" id="event_date" name="event_date" required />
+            <input
+              type="datetime-local"
+              class="form-control"
+              id="event_date"
+              name="event_date"
+              min="<%= moment().add(330, 'minutes').format('YYYY-MM-DDTHH:mm') %>"
+              required
+            />
           </div>
 
           <div class="col-6 mb-3" id="skype_div1" style="display: none">
@@ -145,7 +152,7 @@
             <div class="d-flex">
               <ul class="card-body px-5">
                 <li class="class-text">
-                  Gmeet Link:
+                  <% if(events[i]?.hangoutLink) { %> Gmeet Link:
                   <a
                     class="card-link"
                     style="outline: none; text-decoration: none"
@@ -154,6 +161,12 @@
                   >
                     <%= events[i]?.hangoutLink %>
                   </a>
+                  <% } else { %>
+                  <div>
+                    <%= events[i]?.description?.substring(events[i]?.description?.indexOf('Candidate SkypeId'),
+                    events[i]?.description?.indexOf('Kindly go through')) %>
+                  </div>
+                  <% } %>
                 </li>
 
                 <li class="class-text">
