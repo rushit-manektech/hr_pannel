@@ -35,7 +35,7 @@ async function refreshToken(req, res) {
   try {
     const content = await fs.readFile(TOKEN_PATH);
     const credentials = JSON.parse(content);
-    credentials.refresh_token = req?.params.token;
+    credentials.refresh_token = req.body.token;
     await fs.writeFile(TOKEN_PATH, JSON.stringify(credentials, null, 2));
     return res.send('replace token successfully');
   } catch (err) {
