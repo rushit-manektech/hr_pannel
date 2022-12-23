@@ -119,6 +119,6 @@ router.get('/delete/:id', async (req, res, next) => {
   }
 });
 
-router.put('/refresh-token/:token', refreshToken);
+router.post('/refresh-token/:token', refreshToken);
 
 module.exports = router;
