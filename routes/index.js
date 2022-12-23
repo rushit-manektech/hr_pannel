@@ -1,6 +1,6 @@
 const router = require('express').Router(),
   { randomUUID } = require('crypto'),
-  authentication = require('../google'),
+  { authentication, refreshToken } = require('../google'),
   { currentISODate, endTime, dateDifference, dateISOFormate } = require('../utils');
 
 router.get('/', async (req, res, next) => {
@@ -118,5 +118,7 @@ router.get('/delete/:id', async (req, res, next) => {
     return res.redirect('/');
   }
 });
+
+router.put('/refresh-token/:token', refreshToken);
 
 module.exports = router;
