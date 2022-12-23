@@ -103,7 +103,7 @@ router.post('/createEvent', async (req, res, next) => {
 
 router.get('/delete/:id', async (req, res, next) => {
   try {
-    const { auth } = await authentication();
+    const { auth, calendar } = await authentication();
 
     await calendar?.events?.delete({
       auth: auth,
