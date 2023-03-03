@@ -11,14 +11,14 @@ router.get('/', async (req, res, next) => {
       timeMin: currentISODate,
       timeMax: new Date(new Date().setHours(23, 59, 59, 999)).toISOString(),
       singleEvents: true,
-      orderBy: 'startTime',
+      orderBy: 'startTime'
     });
     return res.render('index.ejs', {
       title: 'ManekTech Schedule Interview',
       success_message: req.flash('success'),
       error_message: req.flash('error'),
       events: response?.data?.items,
-      currentISODate,
+      currentISODate
     });
   } catch (error) {
     return res.send(error?.message);
@@ -37,12 +37,15 @@ router.post('/createEvent', async (req, res, next) => {
       interviewer_skype_id,
       candidate_skype_id,
       zoom_id,
-      zoom_password,
+      zoom_password
     } = req.body;
 
     const { auth, calendar } = await authentication();
     const startDate = dateISOFormate(event_date);
     const dateDiff = dateDifference('minutes', startDate);
+
+    const minutes_diff = await dateDifference('minutes', event_date);
+    const interview_time_in_minutes = endTime(event_date);
 
     const event = {
       summary: `Manektech interview - ${candidate_name}`,
@@ -61,7 +64,7 @@ router.post('/createEvent', async (req, res, next) => {
       end: { dateTime: endTime(startDate) },
       attendees: [
         { displayName: `Interviewer: ${interviewer_name}`, email: interviewer_email },
-        { displayName: `Candidate: ${candidate_name}`, email: candidate_email },
+        { displayName: `Candidate: ${candidate_name}`, email: candidate_email }
       ],
       reminders: {
         useDefault: false,
@@ -69,9 +72,9 @@ router.post('/createEvent', async (req, res, next) => {
           { method: 'email', minutes: dateDiff },
           { method: 'popup', minutes: dateDiff },
           { method: 'email', minutes: 60 },
-          { method: 'popup', minutes: 10 },
-        ],
-      },
+          { method: 'popup', minutes: 10 }
+        ]
+      }
     };
 
     const eventWithConferenceData = {
@@ -80,10 +83,10 @@ router.post('/createEvent', async (req, res, next) => {
         createRequest: {
           requestId: randomUUID(),
           conferenceSolutionKey: {
-            type: 'hangoutsMeet',
-          },
-        },
-      },
+            type: 'hangoutsMeet'
+          }
+        }
+      }
     };
     await calendar?.events?.insert({
       auth: auth,
@@ -91,7 +94,7 @@ router.post('/createEvent', async (req, res, next) => {
       resource: platform_type === 'skype' ? event : eventWithConferenceData,
       conferenceDataVersion: 1,
       sendUpdates: 'all',
-      sendNotifications: true,
+      sendNotifications: true
     });
     req.flash('success', 'Interview Schedule successfully.');
   } catch (err) {
@@ -109,7 +112,7 @@ router.get('/delete/:id', async (req, res, next) => {
       auth: auth,
       calendarId: 'primary',
       eventId: req.params.id,
-      sendUpdates: 'all',
+      sendUpdates: 'all'
     });
     req.flash('success', 'Interview canceled successfully.');
   } catch (err) {
